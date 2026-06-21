@@ -1,0 +1,30 @@
+{
+  "name": "obsidian-discord-workflow-console",
+  "version": "1.0.0",
+  "description": "Obsidian-style local-first web app for controlling Discord workflow. Kanban cards from prompts, per-card thread URLs, next actions, markdown export to vault, localhost bridges to VS Code and Claude Code.",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha test/*.test.js",
+    "start": "node server.js",
+    "serve": "python3 -m http.server 8787 --directory public"
+  },
+  "keywords": [
+    "obsidian",
+    "discord",
+    "workflow",
+    "kanban",
+    "local-first",
+    "vault"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "jsdom": "^24.1.0",
+    "mocha": "^10.4.0"
+  }
+}

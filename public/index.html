@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KOA Calendar Trip Planner</title>
+  <meta name="description" content="Editable road-trip calendar for a 36 ft Class A motorhome with KOA stops, tourist notes, and GitHub Pages-ready export." />
+  <style>
+    :root {
+      --bg: #f4ede1;
+      --bg-2: #ece1d0;
+      --paper: rgba(255, 255, 255, 0.74);
+      --paper-strong: rgba(255, 255, 255, 0.9);
+      --ink: #201915;
+      --muted: #66584d;
+      --line: rgba(32, 25, 21, 0.12);
+      --line-strong: rgba(32, 25, 21, 0.18);
+      --accent: #81563a;
+      --accent-2: #4f6b63;
+      --gold: #c89a62;
+      --shadow: 0 24px 50px rgba(44, 34, 22, 0.1);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1280px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.85), transparent 28%),
+        radial-gradient(circle at 90% 15%, rgba(129, 86, 58, 0.08), transparent 18%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.16;
+      background-image:
+        linear-gradient(rgba(32,25,21,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(32,25,21,0.03) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(circle at center, black 48%, transparent 90%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+
+    .shell {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(18px);
+      background: rgba(244, 237, 225, 0.78);
+      border-bottom: 1px solid rgba(32,25,21,0.08);
+    }
+
+    .nav {
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 50px;
+      height: 50px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.94), rgba(226,214,200,0.82));
+      border: 1px solid rgba(32,25,21,0.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 12px 24px rgba(52, 40, 31, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid rgba(32,25,21,0.14);
+      border-radius: 14px;
+      transform: rotate(45deg);
+    }
+
+    .brand-mark::after {
+      inset: 16px;
+      border-color: rgba(129,86,58,0.46);
+    }
+
+    .brand-copy small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-size: 19px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--ink);
+    }
+
+    .btn,
+    .pill,
+    .nav-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover,
+    .btn:focus-visible,
+    .nav-chip:hover,
+    .nav-chip:focus-visible,
+    .pill:hover,
+    .pill:focus-visible {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: #f9f4ec;
+      box-shadow: 0 16px 28px rgba(32, 25, 21, 0.12);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.46);
+      border-color: var(--line);
+    }
+
+    .btn-muted {
+      background: rgba(255,255,255,0.42);
+      border-color: rgba(32,25,21,0.08);
+    }
+
+    .btn-danger {
+      background: rgba(102, 28, 28, 0.12);
+      border-color: rgba(102, 28, 28, 0.18);
+      color: #6a1f1f;
+    }
+
+    .hero {
+      padding: 34px 0 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.5);
+      border: 1px solid rgba(32,25,21,0.08);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .hero-copy h1,
+    .section-head h2,
+    .panel h3,
+    .detail h3 {
+      margin: 0;
+      letter-spacing: -0.06em;
+      text-wrap: balance;
+    }
+
+    .hero-copy h1 {
+      margin: 16px 0 14px;
+      font-size: clamp(3rem, 6.8vw, 6rem);
+      line-height: 0.93;
+    }
+
+    .hero-copy h1 span {
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      font-weight: 500;
+      color: #5b4532;
+    }
+
+    .hero-copy p,
+    .section-copy,
+    .panel p,
+    .detail p,
+    .stats-note {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .hero-copy p {
+      margin: 0 0 20px;
+      max-width: 62ch;
+    }
+
+    .hero-actions,
+    .action-row,
+    .legend-row,
+    .toolbar,
+    .stat-grid {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .stack-card,
+    .panel,
+    .detail,
+    .summary-card,
+    .calendar-card,
+    .edit-card,
+    .list-card,
+    .stat-card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.84), rgba(255,255,255,0.68));
+      box-shadow: var(--shadow);
+    }
+
+    .stack-card {
+      padding: 22px;
+    }
+
+    .stack-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+    }
+
+    .stack-card ul,
+    .mini-list {
+      margin: 12px 0 0;
+      padding-left: 18px;
+    }
+
+    .stack-card li,
+    .mini-list li {
+      margin-top: 7px;
+      color: var(--muted);
+    }
+
+    .stats {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat-card {
+      padding: 16px 18px;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 1.5rem;
+      letter-spacing: -0.05em;
+      margin-bottom: 4px;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .main {
+      padding: 10px 0 40px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 22px 0 14px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      margin-bottom: 6px;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.22fr 0.78fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .calendar-card,
+    .edit-card,
+    .list-card {
+      padding: 18px;
+    }
+
+    .calendar-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .month-switcher {
+      display: inline-flex;
+      gap: 8px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.5);
+      border: 1px solid rgba(32,25,21,0.08);
+    }
+
+    .month-switcher button[aria-pressed="true"] {
+      background: var(--ink);
+      color: #fff8ef;
+    }
+
+    .calendar-title {
+      font-size: 1.08rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .weekday-row,
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .weekday-row {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .weekday-row div {
+      padding: 0 10px;
+    }
+
+    .day {
+      min-height: 150px;
+      border-radius: 18px;
+      border: 1px solid rgba(32,25,21,0.08);
+      background: rgba(255,255,255,0.48);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .day.is-outside {
+      opacity: 0.46;
+      background: rgba(255,255,255,0.26);
+    }
+
+    .day.is-today {
+      border-color: rgba(129,86,58,0.34);
+      box-shadow: inset 0 0 0 1px rgba(129,86,58,0.12);
+    }
+
+    .day-num {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+    }
+
+    .day-num small {
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .day-body {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .chip {
+      display: grid;
+      gap: 4px;
+      padding: 8px 9px;
+      border-radius: 13px;
+      border: 1px solid transparent;
+      background: rgba(255,255,255,0.72);
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .chip:hover,
+    .chip:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(32,25,21,0.14);
+      box-shadow: 0 12px 18px rgba(32,25,21,0.06);
+    }
+
+    .chip strong {
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .chip span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .chip.drive { border-left: 4px solid var(--accent); }
+    .chip.stay { border-left: 4px solid var(--accent-2); }
+    .chip.buffer { border-left: 4px solid var(--gold); }
+
+    .chip.selected {
+      outline: 2px solid rgba(129,86,58,0.36);
+      outline-offset: 1px;
+    }
+
+    .chip + .chip { margin-top: 2px; }
+
+    .chip-more {
+      font-size: 11px;
+      color: var(--muted);
+      padding: 0 2px;
+    }
+
+    .toolbar .btn {
+      min-height: 40px;
+      padding: 0 14px;
+      font-size: 14px;
+    }
+
+    .panel h3,
+    .detail h3 {
+      margin-bottom: 10px;
+      font-size: 1.35rem;
+    }
+
+    .summary-card {
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .summary-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+    }
+
+    .summary-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      border: 1px solid rgba(32,25,21,0.12);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.78);
+      color: var(--ink);
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: rgba(129,86,58,0.46);
+      box-shadow: 0 0 0 4px rgba(129,86,58,0.08);
+    }
+
+    .field textarea { min-height: 92px; resize: vertical; }
+
+    .detail-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 34px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(32,25,21,0.09);
+      background: rgba(255,255,255,0.62);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .note-box {
+      margin-top: 12px;
+      border-radius: 16px;
+      border: 1px dashed rgba(32,25,21,0.16);
+      padding: 12px;
+      background: rgba(255,255,255,0.5);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .list-card {
+      margin-top: 18px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+      max-height: 700px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .timeline-item {
+      display: grid;
+      gap: 6px;
+      padding: 12px 12px 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(32,25,21,0.08);
+      background: rgba(255,255,255,0.62);
+      border-left: 4px solid var(--accent);
+      cursor: pointer;
+    }
+
+    .timeline-item.buffer { border-left-color: var(--gold); }
+    .timeline-item.stay { border-left-color: var(--accent-2); }
+    .timeline-item.drive { border-left-color: var(--accent); }
+    .timeline-item.selected {
+      outline: 2px solid rgba(129,86,58,0.3);
+      outline-offset: 1px;
+    }
+
+    .timeline-item strong { font-size: 14px; }
+    .timeline-item small { color: var(--muted); }
+
+    .timeline-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .footer {
+      padding: 14px 0 28px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer .shell {
+      border-top: 1px solid rgba(32,25,21,0.08);
+      padding-top: 14px;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .day { min-height: 136px; }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        min-height: auto;
+        padding: 14px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .nav-links {
+        justify-content: flex-start;
+      }
+      .stats {
+        grid-template-columns: 1fr;
+      }
+      .weekday-row,
+      .calendar-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .weekday-row { display: none; }
+      .day { min-height: 120px; }
+      .field-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell nav">
+      <a class="brand" href="#top" aria-label="KOA Calendar Trip Planner home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-copy">
+          <small>Classic road-trip editor</small>
+          <strong>KOA Calendar Trip Planner</strong>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#calendar">Calendar</a>
+        <a href="#itinerary">Itinerary</a>
+        <a href="#editor">Editor</a>
+        <button class="nav-chip btn-muted" id="export-btn-top" type="button">Export Markdown</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div>
+          <span class="eyebrow">editable • classic • up to date</span>
+          <div class="hero-copy">
+            <h1>Plan the trip like a <span>calendar</span>, not a spreadsheet.</h1>
+            <p>
+              This planner is preloaded with the Egg Harbor Township → Hot Springs → return loop,
+              tuned for a 36 ft Class A motorhome and KOA-friendly stops. Edit dates, KOA bases,
+              drive times, and notes directly in the calendar or sidebar.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-primary" id="add-block-btn" type="button">Add stop</button>
+            <button class="btn btn-secondary" id="reset-btn" type="button">Restore sample itinerary</button>
+            <button class="btn btn-secondary" id="export-btn" type="button">Copy Markdown</button>
+          </div>
+        </div>
+
+        <aside class="stack-card">
+          <h3>Trip snapshot</h3>
+          <p>
+            The current itinerary uses KOAs with big-rig-friendly RV sites, then leaves room for
+            editable buffer days before the fixed Hot Springs stay.
+          </p>
+          <div class="stats" id="stats"></div>
+          <ul class="mini-list">
+            <li>Fixed Hot Springs stay: <strong>September 16–18</strong></li>
+            <li>Designed for: <strong>36 ft Class A motorhome</strong></li>
+            <li>Saved locally in: <strong>browser storage</strong></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="main">
+      <div class="shell">
+        <div class="section-head">
+          <div>
+            <h2>Calendar view</h2>
+            <p>Click any colored block to edit the trip entry for that date range.</p>
+          </div>
+          <div class="toolbar">
+            <div class="month-switcher" role="tablist" aria-label="Month selector">
+              <button type="button" class="nav-chip" data-month="2026-08" aria-pressed="true">Aug 2026</button>
+              <button type="button" class="nav-chip" data-month="2026-09" aria-pressed="false">Sep 2026</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="layout">
+          <div>
+            <div class="calendar-card" id="calendar">
+              <div class="calendar-toolbar">
+                <div class="calendar-title" id="calendar-title">August 2026</div>
+                <div class="legend-row">
+                  <span class="meta-badge"><span aria-hidden="true">■</span> Drive</span>
+                  <span class="meta-badge"><span aria-hidden="true">■</span> Stay</span>
+                  <span class="meta-badge"><span aria-hidden="true">■</span> Buffer / flex</span>
+                </div>
+              </div>
+              <div class="weekday-row" aria-hidden="true">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+              </div>
+              <div class="calendar-grid" id="calendar-grid"></div>
+            </div>
+
+            <div class="list-card" id="itinerary">
+              <div class="calendar-toolbar" style="margin-bottom: 10px;">
+                <div>
+                  <div class="calendar-title">Itinerary list</div>
+                  <div class="stats-note">Every row is editable. Use this as the master sequence.</div>
+                </div>
+              </div>
+              <div class="timeline" id="timeline"></div>
+            </div>
+          </div>
+
+          <div class="edit-card detail" id="editor">
+            <div class="calendar-toolbar" style="margin-bottom: 10px;">
+              <div>
+                <div class="calendar-title">Selected stop</div>
+                <div class="stats-note">Changes save instantly to local storage.</div>
+              </div>
+              <button class="btn btn-danger" id="delete-btn" type="button">Delete</button>
+            </div>
+
+            <div class="summary-card" id="selected-summary">
+              <strong>Select a block to edit</strong>
+              <p>Tap a calendar block or itinerary row to load its details here.</p>
+            </div>
+
+            <div class="detail-meta" id="detail-meta"></div>
+
+            <form id="edit-form">
+              <div class="field-grid">
+                <div class="field">
+                  <label for="title">Trip label</label>
+                  <input id="title" name="title" type="text" placeholder="Hot Springs fixed stay" />
+                </div>
+                <div class="field">
+                  <label for="kind">Type</label>
+                  <select id="kind" name="kind">
+                    <option value="drive">Drive day</option>
+                    <option value="stay">Stay day</option>
+                    <option value="buffer">Buffer / flex day</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="startDate">Start date</label>
+                  <input id="startDate" name="startDate" type="date" />
+                </div>
+                <div class="field">
+                  <label for="endDate">End date</label>
+                  <input id="endDate" name="endDate" type="date" />
+                </div>
+                <div class="field full">
+                  <label for="campground">KOA / stop</label>
+                  <input id="campground" name="campground" type="text" placeholder="Hot Springs National Park KOA Holiday" />
+                </div>
+                <div class="field">
+                  <label for="driveMinutes">Drive minutes</label>
+                  <input id="driveMinutes" name="driveMinutes" type="number" min="0" step="1" placeholder="240" />
+                </div>
+                <div class="field">
+                  <label for="rigFit">Rig fit note</label>
+                  <input id="rigFit" name="rigFit" type="text" placeholder="100' max length" />
+                </div>
+                <div class="field full">
+                  <label for="highlights">Tourist stops / notes</label>
+                  <textarea id="highlights" name="highlights" placeholder="Gettysburg Battlefield; downtown walk; afternoon buffer..."></textarea>
+                </div>
+                <div class="field full">
+                  <label for="notes">Planner notes</label>
+                  <textarea id="notes" name="notes" placeholder="Use this stop for a slower evening, fuel, laundry, or a visitor day."></textarea>
+                </div>
+              </div>
+
+              <div class="action-row" style="margin-top: 10px;">
+                <button class="btn btn-primary" id="save-btn" type="submit">Save changes</button>
+                <button class="btn btn-secondary" id="duplicate-btn" type="button">Duplicate block</button>
+              </div>
+            </form>
+
+            <div class="note-box" id="rendered-note">
+              Markdown export appears here after you copy it. The app keeps everything in local storage so the trip is easy to tweak.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">
+      Built for a KOA-heavy RV loop. Classic calendar feel, clean editing, and GitHub Pages-friendly static HTML.
+    </div>
+  </footer>
+
+  <script>
+    const STORAGE_KEY = 'koa-calendar-itinerary-v1';
+    const MONTHS = [
+      { key: '2026-08', title: 'August 2026', year: 2026, month: 7 },
+      { key: '2026-09', title: 'September 2026', year: 2026, month: 8 },
+    ];
+
+    const SAMPLE_BLOCKS = [
+      {
+        id: 'gettysburg',
+        title: 'Egg Harbor Twp → Gettysburg',
+        kind: 'drive',
+        startDate: '2026-08-24',
+        endDate: '2026-08-25',
+        campground: 'Gettysburg / Battlefield KOA Holiday',
+        driveMinutes: 244,
+        rigFit: "Big-rig friendly RV sites",
+        highlights: 'First leg. Gettysburg Battlefield, town walk, museum time.',
+        notes: 'Easy first jump with an iconic history stop.',
+      },
+      {
+        id: 'natural-bridge',
+        title: 'Gettysburg → Natural Bridge / Lexington',
+        kind: 'drive',
+        startDate: '2026-08-26',
+        endDate: '2026-08-27',
+        campground: 'Natural Bridge / Lexington KOA Holiday',
+        driveMinutes: 257,
+        rigFit: "82' max length",
+        highlights: 'Shenandoah Valley, Luray area, scenic mountain roads.',
+        notes: 'Good midpoint for Blue Ridge scenery.',
+      },
+      {
+        id: 'asheville',
+        title: 'Natural Bridge → Asheville',
+        kind: 'drive',
+        startDate: '2026-08-28',
+        endDate: '2026-08-29',
+        campground: 'Asheville East KOA Holiday',
+        driveMinutes: 306,
+        rigFit: '50/30-amp full hookups',
+        highlights: 'Blue Ridge Parkway, Asheville food and downtown time.',
+        notes: 'Stretch and reset before the Tennessee run.',
+      },
+      {
+        id: 'nashville',
+        title: 'Asheville → Nashville',
+        kind: 'drive',
+        startDate: '2026-08-30',
+        endDate: '2026-08-31',
+        campground: 'Nashville KOA Resort',
+        driveMinutes: 335,
+        rigFit: 'Pull-thru / full hookup RV sites',
+        highlights: 'Music City, food, easy overnight around downtown.',
+        notes: 'One of the longest legs, still under six hours.',
+      },
+      {
+        id: 'memphis',
+        title: 'Nashville → Memphis',
+        kind: 'drive',
+        startDate: '2026-09-01',
+        endDate: '2026-09-02',
+        campground: 'Memphis KOA Journey',
+        driveMinutes: 204,
+        rigFit: "70' max length",
+        highlights: 'Beale Street, barbecue, and an easy post-drive evening.',
+        notes: 'Marion, Arkansas base just outside Memphis.',
+      },
+      {
+        id: 'littlerock',
+        title: 'Memphis → Little Rock',
+        kind: 'drive',
+        startDate: '2026-09-03',
+        endDate: '2026-09-04',
+        campground: 'Little Rock North / Jct. I-40 KOA Journey',
+        driveMinutes: 146,
+        rigFit: 'Full hookup pull-thru sites',
+        highlights: 'Short reset day, riverfront walk, stock up on supplies.',
+        notes: 'Good shorter hop before the Ozarks.',
+      },
+      {
+        id: 'branson-outbound',
+        title: 'Little Rock → Branson',
+        kind: 'drive',
+        startDate: '2026-09-05',
+        endDate: '2026-09-06',
+        campground: 'Branson KOA Holiday',
+        driveMinutes: 260,
+        rigFit: "75' max length",
+        highlights: 'Branson Strip, Table Rock Lake, tourist stop energy.',
+        notes: 'Keep this as a flexible Ozarks tourism stop.',
+      },
+      {
+        id: 'flex-window',
+        title: 'Arkansas flex window',
+        kind: 'buffer',
+        startDate: '2026-09-07',
+        endDate: '2026-09-15',
+        campground: 'Open buffer days for Arkansas / Ozarks edits',
+        driveMinutes: 0,
+        rigFit: 'Keep under 6 hrs if you add a detour',
+        highlights: 'Use for rest, laundry, Hot Springs prep, or extra local sightseeing.',
+        notes: 'This is the editable buffer section before the fixed Hot Springs arrival.',
+      },
+      {
+        id: 'hot-springs',
+        title: 'Hot Springs fixed stay',
+        kind: 'stay',
+        startDate: '2026-09-16',
+        endDate: '2026-09-18',
+        campground: 'Hot Springs National Park KOA Holiday',
+        driveMinutes: 0,
+        rigFit: 'Full hookup RV sites; easy pull-throughs',
+        highlights: 'Bathhouse Row, Hot Springs National Park, slower tourist days.',
+        notes: 'This is the fixed target stay from the trip brief.',
+      },
+      {
+        id: 'branson-return',
+        title: 'Hot Springs → Branson',
+        kind: 'drive',
+        startDate: '2026-09-19',
+        endDate: '2026-09-20',
+        campground: 'Branson KOA Holiday',
+        driveMinutes: 259,
+        rigFit: "75' max length",
+        highlights: 'Return leg with an easy tourist stop and a shorter drive.',
+        notes: 'Use Branson as the first return overnight.',
+      },
+      {
+        id: 'st-louis',
+        title: 'Branson → St. Louis',
+        kind: 'drive',
+        startDate: '2026-09-21',
+        endDate: '2026-09-22',
+        campground: 'St. Louis West / Historic Route 66 KOA Holiday',
+        driveMinutes: 283,
+        rigFit: 'Big-rig friendly RV sites',
+        highlights: 'Gateway Arch, Route 66, riverfront walk.',
+        notes: 'Good urban stop without an extreme drive.',
+      },
+      {
+        id: 'indianapolis',
+        title: 'St. Louis → Indianapolis',
+        kind: 'drive',
+        startDate: '2026-09-23',
+        endDate: '2026-09-24',
+        campground: 'Indianapolis KOA Holiday',
+        driveMinutes: 273,
+        rigFit: "120' max length",
+        highlights: 'Greenfield base, very big-rig friendly.',
+        notes: 'Roomy overnight before the Ohio leg.',
+      },
+      {
+        id: 'sunbury',
+        title: 'Indianapolis → Sunbury / Columbus North',
+        kind: 'drive',
+        startDate: '2026-09-25',
+        endDate: '2026-09-25',
+        campground: 'Sunbury / Columbus North KOA Holiday',
+        driveMinutes: 232,
+        rigFit: "110' max length",
+        highlights: 'Columbus-area overnight with open country setting.',
+        notes: 'Nice shorter hop and easy access.',
+      },
+      {
+        id: 'washington',
+        title: 'Sunbury → Washington / Pittsburgh SW',
+        kind: 'drive',
+        startDate: '2026-09-26',
+        endDate: '2026-09-26',
+        campground: 'Washington / Pittsburgh SW KOA Journey',
+        driveMinutes: 189,
+        rigFit: "86' max length",
+        highlights: 'Pittsburgh-adjacent stop with wooded hills.',
+        notes: 'Good final big-city-adjacent overnight.',
+      },
+      {
+        id: 'elizabethtown',
+        title: 'Washington → Elizabethtown / Hershey',
+        kind: 'drive',
+        startDate: '2026-09-27',
+        endDate: '2026-09-28',
+        campground: 'Elizabethtown / Hershey KOA Holiday',
+        driveMinutes: 273,
+        rigFit: "100' max length",
+        highlights: 'Hershey / Lancaster / final Pennsylvania buffer.',
+        notes: 'One last comfortable KOA before home.',
+      },
+      {
+        id: 'home',
+        title: 'Elizabethtown → Egg Harbor Township',
+        kind: 'stay',
+        startDate: '2026-09-29',
+        endDate: '2026-09-29',
+        campground: 'Home',
+        driveMinutes: 194,
+        rigFit: 'Final drive day',
+        highlights: 'Wrap up the loop and unload.',
+        notes: 'Trip complete.',
+      },
+    ];
+
+    const state = {
+      blocks: loadBlocks(),
+      selectedId: null,
+      activeMonth: '2026-08',
+    };
+
+    const els = {
+      calendarGrid: document.getElementById('calendar-grid'),
+      calendarTitle: document.getElementById('calendar-title'),
+      timeline: document.getElementById('timeline'),
+      stats: document.getElementById('stats'),
+      selectedSummary: document.getElementById('selected-summary'),
+      detailMeta: document.getElementById('detail-meta'),
+      renderedNote: document.getElementById('rendered-note'),
+      form: document.getElementById('edit-form'),
+      title: document.getElementById('title'),
+      kind: document.getElementById('kind'),
+      startDate: document.getElementById('startDate'),
+      endDate: document.getElementById('endDate'),
+      campground: document.getElementById('campground'),
+      driveMinutes: document.getElementById('driveMinutes'),
+      rigFit: document.getElementById('rigFit'),
+      highlights: document.getElementById('highlights'),
+      notes: document.getElementById('notes'),
+      addBlockBtn: document.getElementById('add-block-btn'),
+      resetBtn: document.getElementById('reset-btn'),
+      exportBtn: document.getElementById('export-btn'),
+      exportBtnTop: document.getElementById('export-btn-top'),
+      deleteBtn: document.getElementById('delete-btn'),
+      duplicateBtn: document.getElementById('duplicate-btn'),
+      timelineNote: document.getElementById('timeline-note'),
+    };
+
+    function cloneBlocks(list) {
+      return JSON.parse(JSON.stringify(list));
+    }
+
+    function loadBlocks() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return cloneBlocks(SAMPLE_BLOCKS);
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed) || parsed.length === 0) return cloneBlocks(SAMPLE_BLOCKS);
+        return parsed;
+      } catch (err) {
+        return cloneBlocks(SAMPLE_BLOCKS);
+      }
+    }
+
+    function saveBlocks() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.blocks));
+    }
+
+    function sortBlocks() {
+      state.blocks.sort((a, b) => a.startDate.localeCompare(b.startDate) || a.endDate.localeCompare(b.endDate));
+    }
+
+    function blockColor(kind) {
+      return kind === 'stay' ? 'stay' : kind === 'buffer' ? 'buffer' : 'drive';
+    }
+
+    function formatDateLong(value) {
+      return new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }).format(new Date(value + 'T12:00:00'));
+    }
+
+    function formatDateCell(value) {
+      return new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+      }).format(new Date(value + 'T12:00:00'));
+    }
+
+    function minutesToText(minutes) {
+      const total = Number(minutes || 0);
+      if (!total) return '0h';
+      const hrs = Math.floor(total / 60);
+      const mins = Math.round(total % 60);
+      if (!hrs) return `${mins}m`;
+      return mins ? `${hrs}h ${mins}m` : `${hrs}h`;
+    }
+
+    function getDateRange(startDate, endDate) {
+      const dates = [];
+      const current = new Date(startDate + 'T12:00:00');
+      const end = new Date(endDate + 'T12:00:00');
+      while (current <= end) {
+        dates.push(current.toISOString().slice(0, 10));
+        current.setDate(current.getDate() + 1);
+      }
+      return dates;
+    }
+
+    function getBlocksForDate(date) {
+      return state.blocks.filter(block => date >= block.startDate && date <= block.endDate);
+    }
+
+    function getSelectedBlock() {
+      return state.blocks.find(block => block.id === state.selectedId) || null;
+    }
+
+    function computeStats() {
+      const drives = state.blocks.filter(block => Number(block.driveMinutes) > 0);
+      const totalDriveMinutes = drives.reduce((sum, block) => sum + Number(block.driveMinutes || 0), 0);
+      const avgDrive = drives.length ? totalDriveMinutes / drives.length : 0;
+      const koaStops = state.blocks.filter(block => block.campground && block.campground !== 'Home').length;
+      const hotSprings = state.blocks.find(block => block.id === 'hot-springs');
+      return [
+        { value: minutesToText(totalDriveMinutes), label: 'Total drive time' },
+        { value: minutesToText(avgDrive), label: 'Average drive leg' },
+        { value: String(koaStops), label: 'KOA / stay blocks' },
+        { value: hotSprings ? formatDateCell(hotSprings.startDate) : '—', label: 'Hot Springs arrival' },
+      ];
+    }
+
+    function renderStats() {
+      els.stats.innerHTML = computeStats().map(stat => `
+        <div class="stat-card">
+          <strong>${stat.value}</strong>
+          <span>${stat.label}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderCalendar() {
+      const month = MONTHS.find(item => item.key === state.activeMonth) || MONTHS[0];
+      els.calendarTitle.textContent = month.title;
+      const firstOfMonth = new Date(month.year, month.month, 1, 12, 0, 0);
+      const start = new Date(firstOfMonth);
+      start.setDate(firstOfMonth.getDate() - firstOfMonth.getDay());
+      const days = [];
+      const cursor = new Date(start);
+
+      for (let i = 0; i < 42; i++) {
+        const iso = cursor.toISOString().slice(0, 10);
+        const inMonth = cursor.getMonth() === month.month;
+        const blocks = getBlocksForDate(iso);
+        const dayMarkup = blocks.slice(0, 2).map(block => `
+          <button type="button" class="chip ${blockColor(block.kind)} ${state.selectedId === block.id ? 'selected' : ''}" data-select-id="${block.id}" aria-label="Open ${block.title}">
+            <strong>${block.title}</strong>
+            <span>${block.campground}</span>
+          </button>
+        `).join('');
+        const moreCount = Math.max(0, blocks.length - 2);
+        days.push(`
+          <div class="day ${inMonth ? '' : 'is-outside'} ${iso === todayIso() ? 'is-today' : ''}">
+            <div class="day-num">
+              <span>${cursor.getDate()}</span>
+              <small>${formatDateCell(iso)}</small>
+            </div>
+            <div class="day-body">
+              ${dayMarkup || '<span class="chip-more">No stop planned</span>'}
+              ${moreCount ? `<span class="chip-more">+${moreCount} more</span>` : ''}
+            </div>
+          </div>
+        `);
+        cursor.setDate(cursor.getDate() + 1);
+      }
+
+      els.calendarGrid.innerHTML = days.join('');
+      els.calendarGrid.querySelectorAll('[data-select-id]').forEach(button => {
+        button.addEventListener('click', () => selectBlock(button.dataset.selectId));
+      });
+    }
+
+    function renderTimeline() {
+      els.timeline.innerHTML = state.blocks.map(block => {
+        const selected = state.selectedId === block.id ? 'selected' : '';
+        const klass = blockColor(block.kind);
+        return `
+          <button type="button" class="timeline-item ${klass} ${selected}" data-select-id="${block.id}">
+            <div class="timeline-top">
+              <strong>${block.title}</strong>
+              <small>${block.kind.toUpperCase()}</small>
+            </div>
+            <small>${formatDateLong(block.startDate)} → ${formatDateLong(block.endDate)}</small>
+            <small>${block.campground}</small>
+            <small>${block.driveMinutes ? `${minutesToText(block.driveMinutes)} drive` : 'No driving'}</small>
+          </button>
+        `;
+      }).join('');
+
+      els.timeline.querySelectorAll('[data-select-id]').forEach(button => {
+        button.addEventListener('click', () => selectBlock(button.dataset.selectId));
+      });
+    }
+
+    function updateSummary(block) {
+      if (!block) {
+        els.selectedSummary.innerHTML = '<strong>Select a block to edit</strong><p>Tap a calendar block or itinerary row to load its details here.</p>';
+        els.detailMeta.innerHTML = '';
+        els.renderedNote.textContent = 'Markdown export appears here after you copy it. The app keeps everything in local storage so the trip is easy to tweak.';
+        return;
+      }
+
+      els.selectedSummary.innerHTML = `
+        <strong>${block.title}</strong>
+        <p>${block.campground || 'No campground'} • ${formatDateLong(block.startDate)} → ${formatDateLong(block.endDate)}</p>
+      `;
+
+      els.detailMeta.innerHTML = [
+        `<span class="meta-badge">${block.kind}</span>`,
+        `<span class="meta-badge">${block.driveMinutes ? minutesToText(block.driveMinutes) + ' drive' : 'No drive'}</span>`,
+        block.rigFit ? `<span class="meta-badge">${block.rigFit}</span>` : '',
+      ].filter(Boolean).join('');
+
+      els.renderedNote.textContent = buildMarkdown(block);
+    }
+
+    function fillForm(block) {
+      if (!block) {
+        els.form.reset();
+        return;
+      }
+      els.title.value = block.title || '';
+      els.kind.value = block.kind || 'drive';
+      els.startDate.value = block.startDate || '';
+      els.endDate.value = block.endDate || '';
+      els.campground.value = block.campground || '';
+      els.driveMinutes.value = block.driveMinutes ?? '';
+      els.rigFit.value = block.rigFit || '';
+      els.highlights.value = block.highlights || '';
+      els.notes.value = block.notes || '';
+    }
+
+    function selectBlock(id) {
+      state.selectedId = id;
+      saveBlocks();
+      renderAll();
+      const block = getSelectedBlock();
+      fillForm(block);
+      updateSummary(block);
+    }
+
+    function buildMarkdown(block) {
+      if (!block) return '';
+      const related = getDateRange(block.startDate, block.endDate).join(', ');
+      return [
+        '---',
+        `title: ${block.title}`,
+        `type: ${block.kind}`,
+        `start: ${block.startDate}`,
+        `end: ${block.endDate}`,
+        `campground: ${block.campground || ''}`,
+        `driveMinutes: ${block.driveMinutes || 0}`,
+        `rigFit: ${block.rigFit || ''}`,
+        '---',
+        '',
+        `# ${block.title}`,
+        '',
+        `**Dates:** ${formatDateLong(block.startDate)} → ${formatDateLong(block.endDate)}`,
+        `**Campground:** ${block.campground || '—'}`,
+        `**Drive:** ${block.driveMinutes ? minutesToText(block.driveMinutes) : 'No drive'}`,
+        `**Rig fit:** ${block.rigFit || '—'}`,
+        '',
+        '## Tourist stops / notes',
+        block.highlights || '—',
+        '',
+        '## Planner notes',
+        block.notes || '—',
+        '',
+        `## Covered dates`,
+        related,
+      ].join('\n');
+    }
+
+    function exportMarkdown() {
+      sortBlocks();
+      const lines = [
+        '# KOA Calendar Trip Planner',
+        '',
+        '| Dates | Stop | Type | Drive | KOA / Rig fit | Notes |',
+        '|---|---|---:|---:|---|---|',
+      ];
+
+      state.blocks.forEach(block => {
+        lines.push(
+          `| ${formatDateLong(block.startDate)} → ${formatDateLong(block.endDate)} | ${escapePipe(block.title)} | ${block.kind} | ${block.driveMinutes ? minutesToText(block.driveMinutes) : '—'} | ${escapePipe(block.campground || '—')} / ${escapePipe(block.rigFit || '—')} | ${escapePipe(block.highlights || block.notes || '—')} |`
+        );
+      });
+      lines.push('', 'Fixed Hot Springs arrival: September 16–18, 2026');
+      return lines.join('\n');
+    }
+
+    function escapePipe(text) {
+      return String(text).replaceAll('|', '\\|');
+    }
+
+    async function copyMarkdown() {
+      const text = exportMarkdown();
+      await navigator.clipboard.writeText(text);
+      els.renderedNote.textContent = text;
+    }
+
+    function addBlock() {
+      const baseDate = state.selectedId ? getSelectedBlock().endDate : '2026-09-01';
+      const nextDate = shiftDate(baseDate, 1);
+      const id = `block-${Date.now()}`;
+      const block = {
+        id,
+        title: 'New editable stop',
+        kind: 'stay',
+        startDate: nextDate,
+        endDate: nextDate,
+        campground: 'KOA / stop name',
+        driveMinutes: 0,
+        rigFit: 'Add max-length note',
+        highlights: 'Tourist stop details',
+        notes: 'Edit this block to fit the route.',
+      };
+      state.blocks.push(block);
+      state.selectedId = id;
+      saveBlocks();
+      renderAll();
+      fillForm(block);
+      updateSummary(block);
+    }
+
+    function duplicateBlock() {
+      const selected = getSelectedBlock();
+      if (!selected) return;
+      const dup = {
+        ...cloneBlocks([selected])[0],
+        id: `block-${Date.now()}`,
+        title: `${selected.title} copy`,
+        startDate: shiftDate(selected.endDate, 1),
+        endDate: shiftDate(selected.endDate, 1),
+      };
+      state.blocks.push(dup);
+      state.selectedId = dup.id;
+      saveBlocks();
+      renderAll();
+      fillForm(dup);
+      updateSummary(dup);
+    }
+
+    function deleteBlock() {
+      const selected = getSelectedBlock();
+      if (!selected) return;
+      const ok = confirm(`Delete "${selected.title}"?`);
+      if (!ok) return;
+      state.blocks = state.blocks.filter(block => block.id !== selected.id);
+      state.selectedId = state.blocks[0]?.id || null;
+      saveBlocks();
+      renderAll();
+      const next = getSelectedBlock();
+      fillForm(next);
+      updateSummary(next);
+    }
+
+    function shiftDate(date, deltaDays) {
+      const d = new Date(date + 'T12:00:00');
+      d.setDate(d.getDate() + deltaDays);
+      return d.toISOString().slice(0, 10);
+    }
+
+    function todayIso() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function renderAll() {
+      sortBlocks();
+      renderStats();
+      renderCalendar();
+      renderTimeline();
+      const block = getSelectedBlock() || state.blocks[0] || null;
+      if (block && !state.selectedId) state.selectedId = block.id;
+      if (block) {
+        fillForm(block);
+        updateSummary(block);
+      } else {
+        updateSummary(null);
+      }
+    }
+
+    function bindEvents() {
+      els.form.addEventListener('submit', event => {
+        event.preventDefault();
+        const selected = getSelectedBlock();
+        if (!selected) return;
+        selected.title = els.title.value.trim();
+        selected.kind = els.kind.value;
+        selected.startDate = els.startDate.value;
+        selected.endDate = els.endDate.value;
+        selected.campground = els.campground.value.trim();
+        selected.driveMinutes = Number(els.driveMinutes.value || 0);
+        selected.rigFit = els.rigFit.value.trim();
+        selected.highlights = els.highlights.value.trim();
+        selected.notes = els.notes.value.trim();
+        saveBlocks();
+        renderAll();
+        updateSummary(selected);
+      });
+
+      els.addBlockBtn.addEventListener('click', addBlock);
+      els.resetBtn.addEventListener('click', () => {
+        if (!confirm('Restore the sample itinerary?')) return;
+        state.blocks = cloneBlocks(SAMPLE_BLOCKS);
+        state.selectedId = state.blocks[0].id;
+        saveBlocks();
+        renderAll();
+      });
+      els.deleteBtn.addEventListener('click', deleteBlock);
+      els.duplicateBtn.addEventListener('click', duplicateBlock);
+      els.exportBtn.addEventListener('click', copyMarkdown);
+      els.exportBtnTop.addEventListener('click', copyMarkdown);
+
+      document.querySelectorAll('[data-month]').forEach(button => {
+        button.addEventListener('click', () => {
+          state.activeMonth = button.dataset.month;
+          document.querySelectorAll('[data-month]').forEach(btn => btn.setAttribute('aria-pressed', String(btn === button)));
+          renderCalendar();
+        });
+      });
+    }
+
+    function init() {
+      state.selectedId = state.blocks[0]?.id || null;
+      bindEvents();
+      renderAll();
+      if (state.selectedId) selectBlock(state.selectedId);
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[Business Name] | [Lead Magnet Headline]</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    .hero-bg { background: linear-gradient(rgba(30, 41, 55, 0.75), rgba(30, 41, 55, 0.65)), url('https://picsum.photos/id/1015/2000/1200'); background-size: cover; background-position: center; }
+    .nav-link { transition: color 0.2s; }
+    .nav-link:hover { color: #7c3aed; }
+    .form-input { transition: all 0.2s; }
+    .form-input:focus { outline: none; border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1); }
+    .stat { font-size: 2.25rem; line-height: 2.5rem; font-weight: 700; color: #7c3aed; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Navbar -->
+  <nav class="bg-white border-b sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-[#1e2937] rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-[icon-placeholder]" style="color:white"></i>
+        </div>
+        <div>
+          <div class="font-bold text-2xl tracking-tight">[Business Name]</div>
+          <div class="text-[10px] text-gray-500 -mt-1">[Tagline or Industry]</div>
+        </div>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="#how" class="nav-link">How It Works</a>
+        <a href="#testimonials" class="nav-link">Stories</a>
+        <a href="#offer" class="nav-link">[Lead Magnet]</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="tel:[Phone]" class="hidden sm:block text-sm font-medium px-4 py-2 rounded-full border hover:bg-gray-50">Call [Your Name]: [Phone]</a>
+        <button onclick="document.getElementById('offer').scrollIntoView({behavior:'smooth'})" 
+                class="bg-[#7c3aed] hover:bg-violet-700 text-white px-6 py-2.5 rounded-full text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-gift"></i>
+          <span>Get [Lead Magnet]</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero-bg h-[620px] flex items-center">
+    <div class="max-w-5xl mx-auto px-6 text-white">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-1 rounded-full text-sm mb-6">
+          <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+          <span>Trusted by [Social Proof] in [Service Area]</span>
+        </div>
+        <h1 class="text-6xl md:text-7xl font-bold tracking-tighter leading-none mb-4">
+          [Hero Headline – e.g. Get the [result] you need without the usual hassle.]
+        </h1>
+        <p class="text-xl text-white/90 mb-8 max-w-md">[Subheadline describing the pain and the solution for [Target Customer]]</p>
+
+        <div class="bg-white rounded-2xl p-2 shadow-xl max-w-lg">
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input type="text" id="quick-search" placeholder="Search or enter your [specific question e.g. zip, industry, challenge]" 
+                   class="flex-1 px-5 py-3.5 text-gray-900 rounded-xl border-0 focus:ring-0 text-base">
+            <button onclick="quickSearch()" 
+                    class="bg-[#1e2937] hover:bg-black transition px-8 py-3.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2">
+              <i class="fa-solid fa-search"></i>
+              <span>Find Out More</span>
+            </button>
+          </div>
+        </div>
+        <p class="text-xs text-white/60 mt-3">[Trust line e.g. Over 180 results delivered this month • Updated daily]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Bar -->
+  <div class="bg-white border-b">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex flex-wrap justify-center items-center gap-x-10 gap-y-4 text-sm text-gray-600">
+      <div class="flex items-center gap-2"><i class="fa-solid fa-award text-[#7c3aed]"></i> <span>[Social Proof 1]</span></div>
+      <div class="flex items-center gap-2"><i class="fa-solid fa-users text-[#7c3aed]"></i> <span>[Social Proof 2]</span></div>
+      <div class="flex items-center gap-2"><i class="fa-solid fa-star text-[#7c3aed]"></i> <span>[Social Proof 3]</span></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="text-center"><div class="stat">[Number]</div><div class="text-sm text-gray-500 mt-1">[Stat description]</div></div>
+    <div class="text-center"><div class="stat">[Number]</div><div class="text-sm text-gray-500 mt-1">[Stat description]</div></div>
+    <div class="text-center"><div class="stat">[Number]</div><div class="text-sm text-gray-500 mt-1">[Stat description]</div></div>
+    <div class="text-center"><div class="stat">[Number]</div><div class="text-sm text-gray-500 mt-1">[Stat description]</div></div>
+  </div>
+
+  <!-- How It Works -->
+  <div id="how" class="max-w-6xl mx-auto px-6 py-16">
+    <div class="text-center mb-12">
+      <div class="text-[#7c3aed] font-semibold text-sm tracking-[2px] mb-2">SIMPLE PROCESS</div>
+      <h2 class="text-4xl font-bold tracking-tight">How we help [Target Customer] get results faster</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white p-8 rounded-3xl border">
+        <div class="w-12 h-12 bg-violet-100 text-[#7c3aed] rounded-2xl flex items-center justify-center mb-6"><i class="fa-solid fa-search text-2xl"></i></div>
+        <div class="font-semibold text-xl mb-2">1. Tell us what you need</div>
+        <p class="text-gray-600">Fill out our smart form. We learn your situation, timeline, and goals in minutes.</p>
+      </div>
+      <div class="bg-white p-8 rounded-3xl border">
+        <div class="w-12 h-12 bg-violet-100 text-[#7c3aed] rounded-2xl flex items-center justify-center mb-6"><i class="fa-solid fa-list-check text-2xl"></i></div>
+        <div class="font-semibold text-xl mb-2">2. Get your [Lead Magnet] instantly</div>
+        <p class="text-gray-600">Receive personalized insights, recommendations, or a clear next step tailored to you.</p>
+      </div>
+      <div class="bg-white p-8 rounded-3xl border">
+        <div class="w-12 h-12 bg-violet-100 text-[#7c3aed] rounded-2xl flex items-center justify-center mb-6"><i class="fa-solid fa-handshake text-2xl"></i></div>
+        <div class="font-semibold text-xl mb-2">3. Move forward with confidence</div>
+        <p class="text-gray-600">We follow up fast with the exact help you need — no pressure, just results.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lead Capture Form -->
+  <div id="offer" class="max-w-3xl mx-auto px-6 py-16">
+    <div class="bg-white rounded-3xl border shadow-sm p-10">
+      <div class="text-center mb-8">
+        <div class="text-[#7c3aed] font-semibold text-sm tracking-[1.5px]">INSTANT &amp; FREE</div>
+        <h2 class="text-4xl font-bold tracking-tight mt-2">Get Your Free [Lead Magnet]</h2>
+        <p class="text-gray-600 mt-2">No obligation. No spam. Takes less than a minute.</p>
+      </div>
+
+      <form id="lead-form" onsubmit="submitLead(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">FULL NAME</label>
+          <input type="text" id="name" required class="form-input w-full border rounded-xl px-4 py-3" placeholder="Your name">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">PHONE</label>
+          <input type="tel" id="phone" required class="form-input w-full border rounded-xl px-4 py-3" placeholder="[Phone example]">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">EMAIL</label>
+          <input type="email" id="email" required class="form-input w-full border rounded-xl px-4 py-3" placeholder="you@email.com">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">[Specific Field e.g. Zip / Company Size / Main Challenge]</label>
+          <input type="text" id="specific" required class="form-input w-full border rounded-xl px-4 py-3" placeholder="[Example placeholder]">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">I AM A...</label>
+          <select id="type" class="form-input w-full border rounded-xl px-4 py-3">
+            <option>[Option 1 relevant to your business]</option>
+            <option>[Option 2 relevant to your business]</option>
+            <option>Just exploring options</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">TIMELINE</label>
+          <select id="timeline" class="form-input w-full border rounded-xl px-4 py-3">
+            <option>Ready to move forward in next 30 days</option>
+            <option>3–6 months</option>
+            <option>Just exploring options</option>
+          </select>
+        </div>
+        <div class="md:col-span-2 pt-2">
+          <button type="submit" class="w-full bg-[#1e2937] hover:bg-black transition text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-3 text-base">
+            <i class="fa-solid fa-gift"></i>
+            <span>GET MY FREE [Lead Magnet] NOW</span>
+          </button>
+          <p class="text-center text-xs text-gray-500 mt-3">Your [Lead Magnet] will be delivered by email (and text if you opt in). We respect your time.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <div id="testimonials" class="bg-[#1e2937] text-white py-16">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-10">
+        <div class="text-violet-400 text-sm tracking-widest">REAL STORIES</div>
+        <h3 class="text-4xl font-bold tracking-tight mt-2">People just like you who got results</h3>
+      </div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white/5 p-8 rounded-3xl">
+          <div class="flex gap-1 text-yellow-400 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="italic">"[Realistic testimonial quote adapted to your industry]."</p>
+          <div class="mt-6 text-sm font-medium">— [Client Name], [Location or Company]</div>
+        </div>
+        <div class="bg-white/5 p-8 rounded-3xl">
+          <div class="flex gap-1 text-yellow-400 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="italic">"[Second realistic testimonial quote]."</p>
+          <div class="mt-6 text-sm font-medium">— [Client Name], [Location or Company]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final CTA -->
+  <div class="max-w-3xl mx-auto px-6 py-20 text-center">
+    <h2 class="text-4xl font-bold tracking-tight">Ready to get started?</h2>
+    <p class="text-xl text-gray-600 mt-3 mb-8">Start with your free [Lead Magnet] — no pressure, just clear next steps.</p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <button onclick="document.getElementById('offer').scrollIntoView({behavior:'smooth'})" class="px-8 py-4 bg-[#7c3aed] text-white font-semibold rounded-2xl flex items-center justify-center gap-2 text-lg">
+        <i class="fa-solid fa-gift"></i> Get [Lead Magnet] Now
+      </button>
+      <a href="tel:[Phone]" class="px-8 py-4 border border-gray-300 hover:bg-gray-100 font-semibold rounded-2xl flex items-center justify-center gap-2 text-lg">
+        <i class="fa-solid fa-phone"></i> Call [Your Name]
+      </a>
+    </div>
+    <p class="text-xs text-gray-500 mt-6">Serving [Service Area] since [Year].</p>
+  </div>
+
+  <footer class="bg-white border-t py-10 text-sm text-gray-500">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>© 2026 [Business Name]. All rights reserved.</div>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-gray-700">Privacy</a>
+        <a href="#" class="hover:text-gray-700">Contact</a>
+      </div>
+      <div class="text-xs">Built with the Eye Console workflow • Local. Honest. Effective.</div>
+    </div>
+  </footer>
+
+  <script>
+    function quickSearch() {
+      const term = document.getElementById('quick-search').value.trim() || '[default search term]';
+      alert(`Thanks! We'll prepare personalized [Lead Magnet] results for "${term}".\n\n(In a live version this would show real results or trigger the form.)`);
+    }
+
+    function submitLead(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const btn = e.target.querySelector('button');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing your [Lead Magnet]...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        alert(`Thank you, ${name.split(' ')[0]}!\n\nYour free [Lead Magnet] has been emailed (and texted if you opted in).\n\n[Your Name] will follow up personally within 24 hours with next steps.`);
+        e.target.reset();
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        console.log('%c[Eye Console] Lead captured for [Business Name] template', 'color:#7c3aed');
+      }, 1650);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joe Schmo Real Estate | Find Your Dream Home</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1e2937;
+      --accent: #7c3aed;
+    }
+    .hero-bg {
+      background: linear-gradient(rgba(30, 41, 55, 0.75), rgba(30, 41, 55, 0.65)), url('https://picsum.photos/id/1015/2000/1200');
+      background-size: cover;
+      background-position: center;
+    }
+    .nav-link {
+      transition: color 0.2s;
+    }
+    .nav-link:hover {
+      color: #7c3aed;
+    }
+    .listing-card {
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .listing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+    .stat {
+      font-size: 2.25rem;
+      line-height: 2.5rem;
+      font-weight: 700;
+      color: #7c3aed;
+    }
+    .form-input {
+      transition: all 0.2s;
+    }
+    .form-input:focus {
+      outline: none;
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    }
+    .section-title {
+      position: relative;
+      display: inline-block;
+    }
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(to right, #7c3aed, transparent);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Navbar -->
+  <nav class="bg-white border-b sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-[#1e2937] rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-home text-white text-xl"></i>
+        </div>
+        <div>
+          <div class="font-bold text-2xl tracking-tight">Joe Schmo</div>
+          <div class="text-[10px] text-gray-500 -mt-1">REAL ESTATE</div>
+        </div>
+      </div>
+      
+      <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="#homes" class="nav-link">Featured Homes</a>
+        <a href="#how" class="nav-link">How It Works</a>
+        <a href="#testimonials" class="nav-link">Stories</a>
+        <a href="#valuation" class="nav-link">Free Valuation</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="tel:5551234567" class="hidden sm:block text-sm font-medium px-4 py-2 rounded-full border hover:bg-gray-50">Call Joe: (555) 123-4567</a>
+        <button onclick="document.getElementById('valuation').scrollIntoView({behavior:'smooth'})" 
+                class="bg-[#7c3aed] hover:bg-violet-700 text-white px-6 py-2.5 rounded-full text-sm font-semibold flex items-center gap-2">
+          <i class="fa-solid fa-calculator"></i>
+          <span>Get Free Valuation</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <div class="hero-bg h-[620px] flex items-center">
+    <div class="max-w-5xl mx-auto px-6 text-white">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-1 rounded-full text-sm mb-6">
+          <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+          <span>Trusted by 450+ families in Metro Heights</span>
+        </div>
+        
+        <h1 class="text-6xl md:text-7xl font-bold tracking-tighter leading-none mb-4">
+          Find the perfect<br>home in Metro Heights.
+        </h1>
+        <p class="text-xl text-white/90 mb-8 max-w-md">Local expertise. Zero pressure. Homes that actually match your life.</p>
+
+        <!-- Quick Search -->
+        <div class="bg-white rounded-2xl p-2 shadow-xl max-w-lg">
+          <div class="flex flex-col sm:flex-row gap-2">
+            <input type="text" id="quick-search" placeholder="Search by neighborhood or zip (e.g. 07712)" 
+                   class="flex-1 px-5 py-3.5 text-gray-900 rounded-xl border-0 focus:ring-0 text-base">
+            <button onclick="quickSearch()" 
+                    class="bg-[#1e2937] hover:bg-black transition px-8 py-3.5 rounded-xl font-semibold text-white flex items-center justify-center gap-2">
+              <i class="fa-solid fa-search"></i>
+              <span>Search Homes</span>
+            </button>
+          </div>
+        </div>
+        <p class="text-xs text-white/60 mt-3">Over 180 active listings • Updated today</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Bar -->
+  <div class="bg-white border-b">
+    <div class="max-w-6xl mx-auto px-6 py-5 flex flex-wrap justify-center items-center gap-x-10 gap-y-4 text-sm text-gray-600">
+      <div class="flex items-center gap-2"><i class="fa-solid fa-award text-[#7c3aed]"></i> <span>12 years local</span></div>
+      <div class="flex items-center gap-2"><i class="fa-solid fa-users text-[#7c3aed]"></i> <span>450+ families helped</span></div>
+      <div class="flex items-center gap-2"><i class="fa-solid fa-star text-[#7c3aed]"></i> <span>4.98 average rating</span></div>
+      <div class="flex items-center gap-2"><i class="fa-solid fa-home text-[#7c3aed]"></i> <span>$425k avg. sale price</span></div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-6">
+    <div class="text-center">
+      <div class="stat">187</div>
+      <div class="text-sm text-gray-500 mt-1">Homes sold in 2025</div>
+    </div>
+    <div class="text-center">
+      <div class="stat">94%</div>
+      <div class="text-sm text-gray-500 mt-1">Clients found home in &lt;45 days</div>
+    </div>
+    <div class="text-center">
+      <div class="stat">3.2x</div>
+      <div class="text-sm text-gray-500 mt-1">Average over asking on listings</div>
+    </div>
+    <div class="text-center">
+      <div class="stat">0</div>
+      <div class="text-sm text-gray-500 mt-1">Hidden fees. Ever.</div>
+    </div>
+  </div>
+
+  <!-- How It Works -->
+  <div id="how" class="max-w-6xl mx-auto px-6 py-16">
+    <div class="text-center mb-12">
+      <div class="text-[#7c3aed] font-semibold text-sm tracking-[2px] mb-2">SIMPLE PROCESS</div>
+      <h2 class="text-4xl font-bold tracking-tight section-title">How we help you find home faster</h2>
+    </div>
+    
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="bg-white p-8 rounded-3xl border">
+        <div class="w-12 h-12 bg-violet-100 text-[#7c3aed] rounded-2xl flex items-center justify-center mb-6"><i class="fa-solid fa-search text-2xl"></i></div>
+        <div class="font-semibold text-xl mb-2">1. Tell us what matters</div>
+        <p class="text-gray-600">Fill out our smart form or chat with Joe. We learn your must-haves, timeline, and budget in minutes.</p>
+      </div>
+      <div class="bg-white p-8 rounded-3xl border">
+        <div class="w-12 h-12 bg-violet-100 text-[#7c3aed] rounded-2xl flex items-center justify-center mb-6"><i class="fa-solid fa-list-check text-2xl"></i></div>
+        <div class="font-semibold text-xl mb-2">2. Get curated matches</div>
+        <p class="text-gray-600">Receive 5–8 hand-selected homes that actually fit. No spam lists. No wasted weekends.</p>
+      </div>
+      <div class="bg-white p-8 rounded-3xl border">
+        <div class="w-12 h-12 bg-violet-100 text-[#7c3aed] rounded-2xl flex items-center justify-center mb-6"><i class="fa-solid fa-handshake text-2xl"></i></div>
+        <div class="font-semibold text-xl mb-2">3. Tour &amp; close with confidence</div>
+        <p class="text-gray-600">Private tours, full negotiation support, and white-glove closing. We handle the details.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Homes -->
+  <div id="homes" class="bg-white py-16 border-t border-b">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-end justify-between mb-8">
+        <div>
+          <div class="text-[#7c3aed] text-sm font-semibold tracking-widest">JUST LISTED</div>
+          <h3 class="text-3xl font-bold tracking-tight">Featured Homes This Week</h3>
+        </div>
+        <a href="#" class="hidden md:flex items-center gap-2 text-sm font-medium text-[#7c3aed]">Browse all 180 homes <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Listing 1 -->
+        <div class="listing-card bg-white border rounded-3xl overflow-hidden">
+          <div class="h-56 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/1016/800/600')"></div>
+          <div class="p-6">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="font-semibold text-xl">$489,000</div>
+                <div class="text-sm text-gray-500">4 bed • 2.5 bath • 2,180 sq ft</div>
+              </div>
+              <div class="text-right text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-medium">New</div>
+            </div>
+            <div class="mt-3 text-sm">142 Oak Lane, Maplewood • 3 min to park</div>
+            <button onclick="bookTour(1)" class="mt-4 w-full py-2.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-full font-medium">Book Private Tour</button>
+          </div>
+        </div>
+
+        <!-- Listing 2 -->
+        <div class="listing-card bg-white border rounded-3xl overflow-hidden">
+          <div class="h-56 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/160/800/600')"></div>
+          <div class="p-6">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="font-semibold text-xl">$625,000</div>
+                <div class="text-sm text-gray-500">5 bed • 3.5 bath • 3,040 sq ft</div>
+              </div>
+              <div class="text-right text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-medium">Price Drop</div>
+            </div>
+            <div class="mt-3 text-sm">88 Riverside Drive, Shoreview • Waterfront</div>
+            <button onclick="bookTour(2)" class="mt-4 w-full py-2.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-full font-medium">Book Private Tour</button>
+          </div>
+        </div>
+
+        <!-- Listing 3 -->
+        <div class="listing-card bg-white border rounded-3xl overflow-hidden">
+          <div class="h-56 bg-cover bg-center" style="background-image: url('https://picsum.photos/id/201/800/600')"></div>
+          <div class="p-6">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="font-semibold text-xl">$379,000</div>
+                <div class="text-sm text-gray-500">3 bed • 2 bath • 1,650 sq ft</div>
+              </div>
+            </div>
+            <div class="mt-3 text-sm">27 Elm Street, Parkside • Walk to train</div>
+            <button onclick="bookTour(3)" class="mt-4 w-full py-2.5 text-sm border border-gray-300 hover:bg-gray-50 rounded-full font-medium">Book Private Tour</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Free Valuation Form -->
+  <div id="valuation" class="max-w-3xl mx-auto px-6 py-16">
+    <div class="bg-white rounded-3xl border shadow-sm p-10">
+      <div class="text-center mb-8">
+        <div class="text-[#7c3aed] font-semibold text-sm tracking-[1.5px]">INSTANT &amp; FREE</div>
+        <h2 class="text-4xl font-bold tracking-tight mt-2">Get Your Home's True Market Value</h2>
+        <p class="text-gray-600 mt-2">No obligation. No spam. Takes 45 seconds.</p>
+      </div>
+
+      <form id="valuation-form" onsubmit="submitValuation(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">FULL NAME</label>
+            <input type="text" id="name" required class="form-input w-full border rounded-xl px-4 py-3" placeholder="Alex Rivera">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-500 mb-1">PHONE</label>
+            <input type="tel" id="phone" required class="form-input w-full border rounded-xl px-4 py-3" placeholder="(555) 867-5309">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">PROPERTY ADDRESS</label>
+          <input type="text" id="address" required class="form-input w-full border rounded-xl px-4 py-3" placeholder="123 Maple Ave, Metro Heights">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">NEIGHBORHOOD / ZIP</label>
+          <input type="text" id="zip" required class="form-input w-full border rounded-xl px-4 py-3" placeholder="07712 or Maplewood">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">I AM A...</label>
+          <select id="type" class="form-input w-full border rounded-xl px-4 py-3">
+            <option>Buyer looking to purchase</option>
+            <option>Seller looking to list</option>
+            <option>Both / Not sure yet</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">TIMELINE</label>
+          <select id="timeline" class="form-input w-full border rounded-xl px-4 py-3">
+            <option>Ready to move in next 30 days</option>
+            <option>3–6 months</option>
+            <option>Just exploring options</option>
+          </select>
+        </div>
+
+        <div class="md:col-span-2 pt-2">
+          <button type="submit" 
+                  class="w-full bg-[#1e2937] hover:bg-black transition text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-3 text-base">
+            <i class="fa-solid fa-calculator"></i>
+            <span>GET MY FREE VALUATION REPORT</span>
+          </button>
+          <p class="text-center text-xs text-gray-500 mt-3">Your report will be emailed within 5 minutes. We respect your inbox.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <div id="testimonials" class="bg-[#1e2937] text-white py-16">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="text-center mb-10">
+        <div class="text-violet-400 text-sm tracking-widest">REAL STORIES</div>
+        <h3 class="text-4xl font-bold tracking-tight mt-2">Families we helped recently</h3>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white/5 p-8 rounded-3xl">
+          <div class="flex gap-1 text-yellow-400 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="italic">"Joe found us a home before it even hit the market. The valuation tool gave us confidence to make a strong offer. We closed 11 days later."</p>
+          <div class="mt-6 text-sm font-medium">— The Patel Family, Maplewood</div>
+        </div>
+        <div class="bg-white/5 p-8 rounded-3xl">
+          <div class="flex gap-1 text-yellow-400 mb-4"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+          <p class="italic">"Sold our house in 9 days for 7% over asking. Joe’s landing page brought us serious buyers only. No tire kickers. Highly recommend."</p>
+          <div class="mt-6 text-sm font-medium">— Sarah &amp; Mike Thompson, Shoreview</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final CTA -->
+  <div class="max-w-3xl mx-auto px-6 py-20 text-center">
+    <h2 class="text-4xl font-bold tracking-tight">Ready to find (or sell) your home?</h2>
+    <p class="text-xl text-gray-600 mt-3 mb-8">Start with a free, no-pressure conversation or instant valuation.</p>
+    
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <button onclick="document.getElementById('valuation').scrollIntoView({behavior:'smooth'})" 
+              class="px-8 py-4 bg-[#7c3aed] text-white font-semibold rounded-2xl flex items-center justify-center gap-2 text-lg">
+        <i class="fa-solid fa-calculator"></i> Get Free Valuation Now
+      </button>
+      <a href="tel:5551234567" class="px-8 py-4 border border-gray-300 hover:bg-gray-100 font-semibold rounded-2xl flex items-center justify-center gap-2 text-lg">
+        <i class="fa-solid fa-phone"></i> Call Joe Directly
+      </a>
+    </div>
+    <p class="text-xs text-gray-500 mt-6">Serving Metro Heights, Maplewood, Shoreview, and surrounding areas since 2014.</p>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t py-10 text-sm text-gray-500">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>© 2026 Joe Schmo Real Estate. All rights reserved.</div>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-gray-700">Privacy</a>
+        <a href="#" class="hover:text-gray-700">Listings</a>
+        <a href="#" class="hover:text-gray-700">Testimonials</a>
+      </div>
+      <div class="text-xs">Built with the Eye Console workflow • Local. Honest. Effective.</div>
+    </div>
+  </footer>
+
+  <script>
+    function tailwindInit() {
+      // Already using CDN, but can extend here if needed
+    }
+    
+    function quickSearch() {
+      const term = document.getElementById('quick-search').value.trim() || 'Metro Heights';
+      alert(`Searching for homes in "${term}"...\n\n(Prototype) In a real deployment this would query MLS and show results.`);
+      // In production this would filter the listings or redirect
+    }
+
+    function bookTour(listingId) {
+      const messages = [
+        "Thanks! Joe will text you within 15 minutes to schedule a private tour of Listing #1.",
+        "Great choice. Joe has availability this weekend for Listing #2. Confirming now...",
+        "Excellent. We'll set up a tour of the Elm Street home. Expect a call shortly."
+      ];
+      alert(messages[listingId - 1] || "Tour request received. Joe will reach out soon.");
+    }
+
+    function submitValuation(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('name').value;
+      const address = document.getElementById('address').value;
+      
+      // Simulate sending to backend / Eye Console bridge
+      const btn = e.target.querySelector('button');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Generating Report...';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        alert(`Thank you, ${name.split(' ')[0]}!\n\nYour free valuation report for ${address} has been emailed.\n\nExpected value range: $412,000 – $448,000 (based on recent comps).\n\nJoe will follow up personally within 24 hours.`);
+        
+        // Reset form
+        e.target.reset();
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+
+        // In real system this would POST to /run-claude or the landing page capture endpoint
+        console.log('%c[Eye Console] Lead captured and sent to vault tracking', 'color:#7c3aed');
+      }, 1650);
+    }
+
+    // Keyboard support for search
+    document.addEventListener('DOMContentLoaded', () => {
+      tailwindInit();
+      
+      const searchInput = document.getElementById('quick-search');
+      if (searchInput) {
+        searchInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') quickSearch();
+        });
+      }
+
+      // Demo: prefill one field for easy testing
+      console.log('%c[Joe Schmo Landing] Eye Console deliverable ready. Open in browser for full experience.', 'color:#64748b');
+    });
+  </script>
+</body>
+</html>
