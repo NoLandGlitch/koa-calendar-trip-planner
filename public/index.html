@@ -297,6 +297,33 @@
       color: var(--muted);
     }
 
+    .koa-camps {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .koa-camp-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(32,25,21,0.08);
+    }
+
+    .koa-camp-item strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .koa-camp-item span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
     .stats {
       margin-top: 12px;
       display: grid;
@@ -714,8 +741,8 @@
             <h1>Map the road trip like a <span>calendar</span>.</h1>
             <p>
               This planner is preloaded with the Egg Harbor Township → Hot Springs → return loop,
-              tuned for a 36 ft Class A motorhome and KOA-friendly stops. Edit dates, KOA bases,
-              drive times, and notes directly in the calendar or sidebar.
+              tuned for a 36 ft Class A motorhome with editable KOA campsite stops. Edit dates,
+              KOA bases, drive times, and notes directly in the calendar or sidebar.
             </p>
           </div>
           <div class="hero-actions">
@@ -737,6 +764,36 @@
             <li>Designed for: <strong>36 ft Class A motorhome</strong></li>
             <li>Saved locally in: <strong>browser storage</strong></li>
           </ul>
+          <div class="koa-camps" aria-label="KOA campsite highlights">
+            <div class="koa-camp-item">
+              <div><strong>Natural Bridge / Lexington KOA Holiday</strong><span>82' max length</span></div>
+              <span>Blue Ridge stop</span>
+            </div>
+            <div class="koa-camp-item">
+              <div><strong>Memphis KOA Journey</strong><span>70' max length</span></div>
+              <span>Marion base</span>
+            </div>
+            <div class="koa-camp-item">
+              <div><strong>Branson KOA Holiday</strong><span>75' max length</span></div>
+              <span>Ozarks stop</span>
+            </div>
+            <div class="koa-camp-item">
+              <div><strong>St. Louis West KOA Holiday</strong><span>Big-rig friendly</span></div>
+              <span>Route 66 stop</span>
+            </div>
+            <div class="koa-camp-item">
+              <div><strong>Indianapolis KOA Holiday</strong><span>120' max length</span></div>
+              <span>Big-rig friendly</span>
+            </div>
+            <div class="koa-camp-item">
+              <div><strong>Sunbury / Columbus North KOA Holiday</strong><span>110' max length</span></div>
+              <span>Ohio overnight</span>
+            </div>
+            <div class="koa-camp-item">
+              <div><strong>Washington / Pittsburgh SW KOA Journey</strong><span>86' max length</span></div>
+              <span>Pittsburgh area</span>
+            </div>
+          </div>
         </aside>
       </div>
     </section>
