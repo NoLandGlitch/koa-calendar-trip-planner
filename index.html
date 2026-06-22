@@ -7,18 +7,18 @@
   <meta name="description" content="Editable road-trip calendar for a 36 ft Class A motorhome with KOA stops, tourist notes, and GitHub Pages-ready export." />
   <style>
     :root {
-      --bg: #f4ede1;
-      --bg-2: #ece1d0;
-      --paper: rgba(255, 255, 255, 0.74);
-      --paper-strong: rgba(255, 255, 255, 0.9);
-      --ink: #201915;
-      --muted: #66584d;
-      --line: rgba(32, 25, 21, 0.12);
-      --line-strong: rgba(32, 25, 21, 0.18);
-      --accent: #81563a;
-      --accent-2: #4f6b63;
-      --gold: #c89a62;
-      --shadow: 0 24px 50px rgba(44, 34, 22, 0.1);
+      --bg: #efe1cd;
+      --bg-2: #dec8aa;
+      --paper: rgba(255, 248, 236, 0.82);
+      --paper-strong: rgba(255, 248, 236, 0.95);
+      --ink: #241814;
+      --muted: #6c5949;
+      --line: rgba(36, 24, 20, 0.14);
+      --line-strong: rgba(36, 24, 20, 0.2);
+      --accent: #8b5531;
+      --accent-2: #5f6e4d;
+      --gold: #b98644;
+      --shadow: 0 24px 50px rgba(59, 40, 23, 0.14);
       --radius-xl: 30px;
       --radius-lg: 22px;
       --radius-md: 16px;
@@ -33,8 +33,8 @@
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.5;
       background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.85), transparent 28%),
-        radial-gradient(circle at 90% 15%, rgba(129, 86, 58, 0.08), transparent 18%),
+        radial-gradient(circle at top left, rgba(255,249,240,0.92), transparent 26%),
+        radial-gradient(circle at 90% 15%, rgba(139, 85, 49, 0.1), transparent 18%),
         linear-gradient(180deg, var(--bg), var(--bg-2));
     }
 
@@ -66,8 +66,8 @@
       top: 0;
       z-index: 30;
       backdrop-filter: blur(18px);
-      background: rgba(244, 237, 225, 0.78);
-      border-bottom: 1px solid rgba(32,25,21,0.08);
+      background: rgba(239, 225, 205, 0.88);
+      border-bottom: 1px solid rgba(36,24,20,0.1);
     }
 
     .nav {
@@ -371,15 +371,15 @@
 
     .layout {
       display: grid;
-      grid-template-columns: 1.22fr 0.78fr;
-      gap: 18px;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 16px;
       align-items: start;
     }
 
     .calendar-card,
     .edit-card,
     .list-card {
-      padding: 18px;
+      padding: 16px;
     }
 
     .calendar-toolbar {
@@ -414,11 +414,12 @@
     .weekday-row,
     .calendar-grid {
       display: grid;
-      grid-template-columns: repeat(7, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 10px;
     }
 
     .weekday-row {
+      display: none;
       margin-bottom: 10px;
       color: var(--muted);
       font-size: 12px;
@@ -432,10 +433,10 @@
     }
 
     .day {
-      min-height: 150px;
+      min-height: 118px;
       border-radius: 18px;
-      border: 1px solid rgba(32,25,21,0.08);
-      background: rgba(255,255,255,0.48);
+      border: 1px solid rgba(36,24,20,0.08);
+      background: rgba(255,248,236,0.6);
       padding: 10px;
       display: flex;
       flex-direction: column;
@@ -452,6 +453,12 @@
     .day.is-today {
       border-color: rgba(129,86,58,0.34);
       box-shadow: inset 0 0 0 1px rgba(129,86,58,0.12);
+    }
+
+    .day.is-trip {
+      border-color: rgba(139,85,49,0.32);
+      background: linear-gradient(180deg, rgba(255,248,236,0.84), rgba(245,228,202,0.82));
+      box-shadow: inset 0 0 0 1px rgba(139,85,49,0.08);
     }
 
     .day-num {
@@ -480,10 +487,10 @@
     .chip {
       display: grid;
       gap: 4px;
-      padding: 8px 9px;
+      padding: 7px 8px;
       border-radius: 13px;
       border: 1px solid transparent;
-      background: rgba(255,255,255,0.72);
+      background: rgba(255,248,236,0.8);
       cursor: pointer;
       text-align: left;
       transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
@@ -631,6 +638,33 @@
       margin-top: 18px;
     }
 
+    .itinerary-accordion {
+      margin-top: 18px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(36,24,20,0.08);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+
+    .itinerary-accordion summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .itinerary-accordion summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .itinerary-accordion[open] summary {
+      border-bottom: 1px solid rgba(36,24,20,0.08);
+      margin-bottom: 12px;
+    }
+
     .timeline {
       display: grid;
       gap: 10px;
@@ -687,7 +721,7 @@
       .stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      .day { min-height: 136px; }
+      .day { min-height: 128px; }
     }
 
     @media (max-width: 760px) {
@@ -700,6 +734,9 @@
       .nav-links {
         justify-content: flex-start;
       }
+      .hero-copy h1 {
+        font-size: clamp(2.4rem, 14vw, 4rem);
+      }
       .stats {
         grid-template-columns: 1fr;
       }
@@ -708,7 +745,7 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
       .weekday-row { display: none; }
-      .day { min-height: 120px; }
+      .day { min-height: 116px; }
       .field-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -802,14 +839,11 @@
       <div class="shell">
         <div class="section-head">
           <div>
-            <h2>Calendar view</h2>
-            <p>Click any colored block to edit the trip entry for that date range.</p>
+            <h2>Trip window</h2>
+            <p>Five days before Hot Springs, the fixed stay, and five days after — all editable.</p>
           </div>
           <div class="toolbar">
-            <div class="month-switcher" role="tablist" aria-label="Month selector">
-              <button type="button" class="nav-chip" data-month="2026-08" aria-pressed="true">Aug 2026</button>
-              <button type="button" class="nav-chip" data-month="2026-09" aria-pressed="false">Sep 2026</button>
-            </div>
+            <span class="meta-badge">11-day calendar</span>
           </div>
         </div>
 
@@ -817,7 +851,7 @@
           <div>
             <div class="calendar-card" id="calendar">
               <div class="calendar-toolbar">
-                <div class="calendar-title" id="calendar-title">August 2026</div>
+                <div class="calendar-title" id="calendar-title">September 11–23, 2026</div>
                 <div class="legend-row">
                   <span class="meta-badge"><span aria-hidden="true">■</span> Drive</span>
                   <span class="meta-badge"><span aria-hidden="true">■</span> Stay</span>
@@ -830,15 +864,16 @@
               <div class="calendar-grid" id="calendar-grid"></div>
             </div>
 
-            <div class="list-card" id="itinerary">
-              <div class="calendar-toolbar" style="margin-bottom: 10px;">
+            <details class="list-card itinerary-accordion" id="itinerary">
+              <summary>
                 <div>
                   <div class="calendar-title">Itinerary list</div>
-                  <div class="stats-note">Every row is editable. Use this as the master sequence.</div>
+                  <div class="stats-note">Open to review every editable stop in order.</div>
                 </div>
-              </div>
+                <span class="meta-badge">Collapsed for one-screen layout</span>
+              </summary>
               <div class="timeline" id="timeline"></div>
-            </div>
+            </details>
           </div>
 
           <div class="edit-card detail" id="editor">
@@ -1252,18 +1287,22 @@
     }
 
     function renderCalendar() {
-      const month = MONTHS.find(item => item.key === state.activeMonth) || MONTHS[0];
-      els.calendarTitle.textContent = month.title;
-      const firstOfMonth = new Date(month.year, month.month, 1, 12, 0, 0);
-      const start = new Date(firstOfMonth);
-      start.setDate(firstOfMonth.getDate() - firstOfMonth.getDay());
-      const days = [];
-      const cursor = new Date(start);
+      const hotSprings = state.blocks.find(block => block.id === 'hot-springs') || {
+        startDate: '2026-09-16',
+        endDate: '2026-09-18',
+      };
+      const startIso = shiftDate(hotSprings.startDate, -5);
+      const endIso = shiftDate(hotSprings.endDate, 5);
+      els.calendarTitle.textContent = `${formatDateLong(startIso)} → ${formatDateLong(endIso)}`;
 
-      for (let i = 0; i < 42; i++) {
+      const days = [];
+      const cursor = new Date(startIso + 'T12:00:00');
+      const end = new Date(endIso + 'T12:00:00');
+
+      while (cursor <= end) {
         const iso = cursor.toISOString().slice(0, 10);
-        const inMonth = cursor.getMonth() === month.month;
         const blocks = getBlocksForDate(iso);
+        const inTrip = iso >= hotSprings.startDate && iso <= hotSprings.endDate;
         const dayMarkup = blocks.slice(0, 2).map(block => `
           <button type="button" class="chip ${blockColor(block.kind)} ${state.selectedId === block.id ? 'selected' : ''}" data-select-id="${block.id}" aria-label="Open ${block.title}">
             <strong>${block.title}</strong>
@@ -1272,7 +1311,7 @@
         `).join('');
         const moreCount = Math.max(0, blocks.length - 2);
         days.push(`
-          <div class="day ${inMonth ? '' : 'is-outside'} ${iso === todayIso() ? 'is-today' : ''}">
+          <div class="day ${inTrip ? 'is-trip' : ''} ${iso === todayIso() ? 'is-today' : ''}">
             <div class="day-num">
               <span>${cursor.getDate()}</span>
               <small>${formatDateCell(iso)}</small>
