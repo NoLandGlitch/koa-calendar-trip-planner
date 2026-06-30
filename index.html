@@ -412,62 +412,88 @@
       align-items: start;
     }
 
-    .calendar-card,
+    .calendar-card {
+      padding: 16px;
+      background: #fffdfa;
+      border: 3px solid rgba(36, 24, 20, 0.9);
+      border-radius: 22px;
+      box-shadow: 0 18px 34px rgba(36, 24, 20, 0.08);
+    }
+
     .editor-card {
       padding: 14px;
     }
 
-    .calendar-head,
-    .editor-head,
-    .summary-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
+    .calendar-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 0.82fr);
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 12px;
     }
 
-    .calendar-head h2,
-    .editor-head h2,
-    .summary-head h3 {
-      font-size: clamp(1.45rem, 2.6vw, 2.2rem);
-      letter-spacing: -0.06em;
+    .calendar-head-left,
+    .calendar-head-right {
+      display: grid;
+      gap: 8px;
+      align-content: start;
     }
 
-    .calendar-head p,
-    .editor-head p,
-    .summary-head p {
-      color: var(--muted);
-      margin-top: 4px;
+    .calendar-head-label {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2rem, 3vw, 3.1rem);
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      color: var(--ink);
+    }
+
+    .calendar-head-label-right {
+      text-align: center;
+    }
+
+    .calendar-head-right {
+      padding-top: 3px;
+    }
+
+    .calendar-head-right p {
+      margin: 0;
+      min-height: 34px;
+      padding: 0 10px;
+      text-align: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      color: var(--ink);
+      font-size: 1.02rem;
+      line-height: 1.35;
     }
 
     .month-controls {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 4px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.52);
-      border: 1px solid rgba(36,24,20,0.08);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+      gap: 10px;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
     }
 
     .month-title {
       font-weight: 800;
       letter-spacing: -0.03em;
-      font-size: 1.05rem;
-      min-width: 130px;
+      font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+      min-width: 160px;
       text-align: center;
     }
 
     .calendar-frame {
-      border-radius: 24px;
-      border: 1px solid rgba(36,24,20,0.08);
-      background:
-        linear-gradient(180deg, rgba(255, 248, 237, 0.98), rgba(243, 226, 199, 0.92));
+      border-radius: 14px;
+      border: 2px solid rgba(36,24,20,0.82);
+      background: #fff;
       overflow: hidden;
       position: relative;
+      padding-bottom: 8px;
     }
 
     .weekday-row,
@@ -477,68 +503,93 @@
     }
 
     .weekday-row {
-      padding: 10px 10px 6px;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      padding: 0;
+      gap: 0;
+      background: #fff;
+      border-top: 1px solid rgba(79,70,62,0.78);
+      border-bottom: 1px solid rgba(79,70,62,0.78);
+      color: #1f1a17;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.08rem;
+      line-height: 1.1;
       font-weight: 800;
     }
 
     .weekday-row div {
-      padding: 0 10px;
+      padding: 11px 8px 10px;
+      text-align: center;
+      border-right: 1px solid rgba(79,70,62,0.68);
+    }
+
+    .weekday-row div:last-child {
+      border-right: 0;
     }
 
     .calendar-grid {
-      gap: 6px;
-      padding: 0 10px 10px;
-      min-height: 300px;
+      gap: 0;
+      padding: 0;
+      min-height: 630px;
       align-content: start;
+      background: #fff;
     }
 
     .day {
-      min-height: 72px;
-      border-radius: 16px;
-      border: 1px solid rgba(29, 36, 48, 0.08);
-      background: rgba(255, 255, 255, 0.86);
-      padding: 8px;
+      min-height: 106px;
+      border-radius: 0;
+      border-right: 1px solid rgba(79,70,62,0.68);
+      border-bottom: 1px solid rgba(79,70,62,0.68);
+      background: #fff;
+      padding: 8px 9px 7px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
       overflow: hidden;
       text-align: left;
       cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      transition: background 0.18s ease, color 0.18s ease;
+      position: relative;
     }
 
     .day:hover,
     .day:focus-visible {
-      transform: translateY(-1px);
-      border-color: rgba(36,24,20,0.16);
-      box-shadow: 0 12px 20px rgba(36,24,20,0.06);
+      transform: none;
+      border-color: rgba(79,70,62,0.68);
+      box-shadow: none;
+      background: #faf7f1;
+    }
+
+    .day::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 24px;
+      height: 24px;
+      background: #fff;
+      border-right: 1px solid rgba(79,70,62,0.78);
+      border-bottom: 1px solid rgba(79,70,62,0.78);
+      pointer-events: none;
     }
 
     .day.blank {
       cursor: default;
-      background: rgba(255,255,255,0.28);
-      border-style: dashed;
-      opacity: 0.36;
+      background: #fff;
+      opacity: 1;
+      border-style: solid;
     }
 
     .day.today {
-      border-color: rgba(139,93,60,0.35);
-      box-shadow: inset 0 0 0 1px rgba(139,93,60,0.12);
+      box-shadow: inset 0 0 0 2px rgba(139,93,60,0.22);
     }
 
     .day.trip {
-      background: linear-gradient(180deg, rgba(255, 248, 239, 0.96), rgba(239, 221, 191, 0.88));
-      border-color: rgba(139,93,60,0.22);
+      background: linear-gradient(180deg, rgba(255, 251, 244, 0.98), rgba(243, 232, 214, 0.94));
+      border-color: rgba(79,70,62,0.68);
     }
 
     .day.selected {
       outline: 2px solid rgba(139,93,60,0.42);
-      outline-offset: 1px;
+      outline-offset: -2px;
     }
 
     .day-top {
@@ -548,24 +599,36 @@
       gap: 6px;
       font-size: 11px;
       font-weight: 800;
+      margin-top: 2px;
+    }
+
+    .day-top span {
+      font-size: 0.9rem;
+      color: #1f1a17;
     }
 
     .day-top small {
-      color: var(--muted);
+      color: #6c625d;
       font-weight: 700;
+      font-size: 0.74rem;
     }
 
     .day-title {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
       line-height: 1.1;
       letter-spacing: -0.02em;
+      color: #211813;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .day-sub {
-      font-size: 9px;
-      color: var(--muted);
-      line-height: 1.2;
+      font-size: 8px;
+      color: #6c625d;
+      line-height: 1.15;
     }
 
     .day-badge {
@@ -573,21 +636,19 @@
       align-items: center;
       gap: 6px;
       align-self: flex-start;
-      padding: 3px 7px;
+      padding: 2px 6px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.62);
-      border: 1px solid rgba(29, 36, 48, 0.08);
-      font-size: 9px;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(79,70,62,0.62);
+      font-size: 8px;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: #6c625d;
     }
 
     .grid-note {
-      padding: 0 16px 14px;
-      color: var(--muted);
-      font-size: 13px;
+      display: none;
     }
 
     .summary-card {
@@ -721,6 +782,14 @@
         grid-template-columns: 1fr;
       }
 
+      .calendar-head {
+        grid-template-columns: 1fr;
+      }
+
+      .calendar-head-right p {
+        min-height: auto;
+      }
+
       .calendar-grid {
         min-height: auto;
       }
@@ -732,8 +801,15 @@
       .brand-copy strong { font-size: 17px; }
       .hero-copy h1 { font-size: clamp(2.2rem, 11vw, 4rem); }
       .photo-gallery { grid-template-columns: 1fr; }
+      .calendar-head-label { font-size: 1.85rem; }
+      .month-title { min-width: 120px; font-size: 0.98rem; }
+      .weekday-row { font-size: 0.72rem; }
+      .weekday-row div { padding: 8px 4px 7px; }
       .calendar-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }
-      .day { min-height: 96px; }
+      .day { min-height: 84px; padding: 7px 7px 6px; }
+      .day-title { font-size: 8px; }
+      .day-sub { font-size: 7px; }
+      .day-badge { font-size: 7px; }
       .stats, .field-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -815,22 +891,24 @@
       <div class="shell layout">
         <section class="calendar-card">
           <div class="calendar-head">
-            <div>
-              <h2>Trip calendar</h2>
-              <p>Only the trip dates show in each month; blanks remain empty around them.</p>
+            <div class="calendar-head-left">
+              <div class="calendar-head-label">Month:</div>
+              <div class="month-controls" aria-label="Month navigation">
+                <button class="btn btn-muted" type="button" id="prev-month-btn" aria-label="Previous month">←</button>
+                <div class="month-title" id="month-title">August 2026</div>
+                <button class="btn btn-muted" type="button" id="next-month-btn" aria-label="Next month">→</button>
+              </div>
             </div>
-            <div class="month-controls" aria-label="Month navigation">
-              <button class="btn btn-muted" type="button" id="prev-month-btn" aria-label="Previous month">←</button>
-              <div class="month-title" id="month-title">August 2026</div>
-              <button class="btn btn-muted" type="button" id="next-month-btn" aria-label="Next month">→</button>
+            <div class="calendar-head-right">
+              <div class="calendar-head-label calendar-head-label-right">Notes:</div>
+              <p id="grid-note">Only the trip dates show in each month; blanks remain empty around them.</p>
             </div>
           </div>
           <div class="calendar-frame">
             <div class="weekday-row" aria-hidden="true">
-              <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+              <div>Sunday</div><div>Monday</div><div>Tuesday</div><div>Wednesday</div><div>Thursday</div><div>Friday</div><div>Saturday</div>
             </div>
             <div class="calendar-grid" id="calendar-grid" aria-live="polite"></div>
-            <div class="grid-note" id="grid-note"></div>
           </div>
         </section>
 
@@ -1171,16 +1249,13 @@
         const isSelected = state.selectedDate === iso ? 'selected' : '';
         const isToday = iso === todayIso() ? 'today' : '';
         const kindText = dayData.kind === 'stay' ? 'Stay' : dayData.kind === 'buffer' ? 'Buffer' : 'Drive';
-        const stopLabel = dayData.campground || 'No stop';
         cells.push(`
           <button type="button" class="day trip ${isSelected} ${isToday}" data-date="${iso}" aria-label="Open ${dayData.title} for ${formatDateLong(iso)}">
             <div class="day-top">
               <span>${day}</span>
               <small>${formatDateShort(iso)}</small>
             </div>
-            <div class="day-badge">${kindText}</div>
             <div class="day-title">${escapeHtml(dayData.title)}</div>
-            <div class="day-sub">${escapeHtml(stopLabel)}</div>
           </button>
         `);
       }
