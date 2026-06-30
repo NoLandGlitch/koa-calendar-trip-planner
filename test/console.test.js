@@ -3,8 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const { expect } = require('chai');
 
-describe('KOA Calendar Trip Planner', function() {
+describe('Hot Springs Road Trip Calendar', function() {
   let document;
+  let window;
 
   before(function() {
     const htmlPath = path.join(__dirname, '../public/index.html');
@@ -15,39 +16,51 @@ describe('KOA Calendar Trip Planner', function() {
       url: 'http://localhost:8787/'
     });
     document = dom.window.document;
+    window = dom.window;
   });
 
-  it('renders the calendar and editor shell', function() {
+  it('renders the month calendar, editor, and month controls', function() {
     expect(document.getElementById('calendar-grid')).to.not.be.null;
-    expect(document.getElementById('timeline')).to.not.be.null;
-    expect(document.getElementById('edit-form')).to.not.be.null;
+    expect(document.getElementById('editor')).to.not.be.null;
+    expect(document.getElementById('prev-month-btn')).to.not.be.null;
+    expect(document.getElementById('next-month-btn')).to.not.be.null;
   });
 
-  it('includes the key editing fields', function() {
-    ['title', 'kind', 'startDate', 'endDate', 'campground', 'driveMinutes', 'rigFit', 'highlights', 'notes'].forEach(id => {
+  it('includes the day editor fields for the selected itinerary entry', function() {
+    ['date', 'kind', 'title', 'campground', 'driveMinutes', 'rigFit', 'highlights', 'notes'].forEach(id => {
       expect(document.getElementById(id), `missing ${id}`).to.not.be.null;
     });
   });
 
-  it('has the main actions needed for editing the trip', function() {
-    expect(document.getElementById('add-block-btn')).to.not.be.null;
-    expect(document.getElementById('reset-btn')).to.not.be.null;
-    expect(document.getElementById('export-btn')).to.not.be.null;
-    expect(document.getElementById('delete-btn')).to.not.be.null;
-    expect(document.getElementById('duplicate-btn')).to.not.be.null;
-  });
-
-  it('loads the sample itinerary with KOA stops and fixed Hot Springs dates', function() {
-    const timelineItems = document.querySelectorAll('.timeline-item');
-    expect(timelineItems.length).to.be.greaterThan(8);
+  it('loads KOA stops and the fixed Hot Springs stay into the page copy', function() {
     expect(document.body.textContent).to.include('Hot Springs fixed stay');
-    expect(document.body.textContent).to.include('September 16–18');
+    expect(document.body.textContent).to.include('Hot Springs National Park KOA Holiday');
     expect(document.body.textContent).to.include('Gettysburg / Battlefield KOA Holiday');
   });
 
-  it('shows stats cards for drive and trip summary', function() {
-    const statCards = document.querySelectorAll('.stat-card');
-    expect(statCards.length).to.equal(4);
-    expect(document.getElementById('stats').textContent).to.include('Average drive leg');
+  it('shows only trip days in the active month view and can slide to the next month', function() {
+    expect(document.getElementById('month-title').textContent).to.equal('August 2026');
+    expect(document.querySelectorAll('.day.trip').length).to.equal(8);
+
+    document.getElementById('next-month-btn').click();
+    expect(document.getElementById('month-title').textContent).to.equal('September 2026');
+    expect(document.querySelectorAll('.day.trip').length).to.equal(29);
+  });
+
+  it('lets you click a day and edit that day’s itinerary', function() {
+    if (document.getElementById('month-title').textContent !== 'August 2026') {
+      document.getElementById('prev-month-btn').click();
+    }
+
+    const dayButton = document.querySelector('[data-date="2026-08-24"]');
+    expect(dayButton).to.not.be.null;
+    dayButton.click();
+
+    const title = document.getElementById('title');
+    title.value = 'Edited road trip day';
+    title.dispatchEvent(new window.Event('input', { bubbles: true }));
+
+    expect(document.getElementById('selected-summary').textContent).to.include('Edited road trip day');
+    expect(document.getElementById('calendar-grid').textContent).to.include('Edited road trip day');
   });
 });
